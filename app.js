@@ -1,17 +1,18 @@
 /** Express app for jobly. */
-
 const express = require("express");
-
 const ExpressError = require("./helpers/expressError");
-
 const morgan = require("morgan");
+
+const companiesRoutes = require("./routes/companiesRoutes")
+
 
 const app = express();
 
 app.use(express.json());
-
 // add logging system
 app.use(morgan("tiny"));
+
+app.use("/companies", companiesRoutes)
 
 /** 404 handler */
 

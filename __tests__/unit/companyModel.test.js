@@ -99,6 +99,7 @@ describe("Test Company class", function () {
     let companies = await Company.search("aapl", 10, 100);
 
     expect(companies.length).toEqual(1);
+    expect(companies[0].handle).toBe("aapl")
   })
 
 });

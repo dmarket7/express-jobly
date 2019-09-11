@@ -64,28 +64,42 @@ class Company {
     if(min_employees > max_employees) {
       throw new ExpressError(`Cannot search min > max`, 400);
     }
+    let counter = 1;
+    let searchArray = []
     
     let clauses = ''
     if(search) {
-      clauses += `handle LIKE '%${search}%'`
+      clauses += `handle LIKE $${counter}`
+      searchArray.push(`%${search}%`)
+      counter++
     }
     if(clauses && min_employees) {
-      clauses += ` AND num_employees >= (CAST(${min_employees} AS INT))`
+      clauses += ` AND num_employees >= (CAST($${counter} AS INT))`
+      searchArray.push(min_employees)
+      counter++
     } else if(min_employees) {
-      clauses += `num_employees >= (CAST(${min_employees} AS INT))`
+      clauses += `num_employees >= (CAST($${counter} AS INT))`
+      searchArray.push(min_employees)
+      counter++
     }
 
     if(clauses && max_employees){
-      clauses += ` AND num_employees <= CAST(${max_employees} AS INT)`
+      clauses += ` AND num_employees <= CAST($${counter} AS INT)`
+      searchArray.push(max_employees)
+      counter++
     } else if(max_employees) {
-      clauses += `num_employees <= CAST(${max_employees} AS INT)`
+      clauses += `num_employees <= CAST($${counter} AS INT)`
+      searchArray.push(max_employees)
+      counter++
     }
     console.log("Clauses  ", clauses)
+    console.log("Search Array Vals  ", searchArray)
+
 
     let companies = await db.query(
       `SELECT handle, name
       FROM companies
-      WHERE ${clauses}`)
+      WHERE ${clauses}`, searchArray )
 
     return companies.rows
   }
