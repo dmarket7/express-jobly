@@ -96,7 +96,7 @@ describe("Test Company class", function () {
   })
 
   test("Can search.", async function () {
-    let companies = await Company.search("aapl", 10);
+    let companies = await Company.search("aapl", 10, 100);
 
     expect(companies.length).toEqual(1);
   })

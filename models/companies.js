@@ -61,30 +61,31 @@ class Company {
   }
 
   static async search(search, min_employees, max_employees){
+    if(min_employees > max_employees) {
+      throw new ExpressError(`Cannot search min > max`, 400);
+    }
+    
     let clauses = ''
     if(search) {
       clauses += `handle LIKE '%${search}%'`
     }
     if(clauses && min_employees) {
-      clauses += ` AND num_employees >= CONVERT(INT,${min_employees})`
+      clauses += ` AND num_employees >= (CAST(${min_employees} AS INT))`
     } else if(min_employees) {
-      clauses += `num_employees >= CONVERT(INT,${min_employees})`
+      clauses += `num_employees >= (CAST(${min_employees} AS INT))`
     }
 
     if(clauses && max_employees){
-      clauses += ` AND num_employees <= CONVERT(INT,${max_employees})`
+      clauses += ` AND num_employees <= CAST(${max_employees} AS INT)`
     } else if(max_employees) {
-      clauses += `num_employees <= CONVERT(INT,${max_employees})`
+      clauses += `num_employees <= CAST(${max_employees} AS INT)`
     }
     console.log("Clauses  ", clauses)
 
     let companies = await db.query(
       `SELECT handle, name
       FROM companies
-      WHERE $1
-      `,
-      [clauses]
-    )
+      WHERE ${clauses}`)
 
     return companies.rows
   }
