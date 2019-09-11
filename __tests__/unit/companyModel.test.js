@@ -1,6 +1,5 @@
 const db = require("../../db");
 const Company = require("../../models/companies");
-// require("dotenv").config();
 process.env.NODE_ENV = "test";
 
 
@@ -94,6 +93,12 @@ describe("Test Company class", function () {
     let allSearch = await Company.all();
 
     expect(allSearch.length).toEqual(1);
+  })
+
+  test("Can search.", async function () {
+    let companies = await Company.search("aapl", 10);
+
+    expect(companies.length).toEqual(1);
   })
 
 });

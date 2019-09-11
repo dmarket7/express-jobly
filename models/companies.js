@@ -60,6 +60,35 @@ class Company {
     return {message: "Company deleted."}
   }
 
+  static async search(search, min_employees, max_employees){
+    let clauses = ''
+    if(search) {
+      clauses += `handle LIKE '%${search}%'`
+    }
+    if(clauses && min_employees) {
+      clauses += ` AND num_employees >= CONVERT(INT,${min_employees})`
+    } else if(min_employees) {
+      clauses += `num_employees >= CONVERT(INT,${min_employees})`
+    }
+
+    if(clauses && max_employees){
+      clauses += ` AND num_employees <= CONVERT(INT,${max_employees})`
+    } else if(max_employees) {
+      clauses += `num_employees <= CONVERT(INT,${max_employees})`
+    }
+    console.log("Clauses  ", clauses)
+
+    let companies = await db.query(
+      `SELECT handle, name
+      FROM companies
+      WHERE $1
+      `,
+      [clauses]
+    )
+
+    return companies.rows
+  }
+
 }
 
 module.exports = Company;
