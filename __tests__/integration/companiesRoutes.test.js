@@ -29,7 +29,7 @@ describe("Company Routes Tests", function () {
       .get('/company');
 
     expect(response.statusCode).toEqual(404);
-  })
+  });
 
   test("Can get all companies from /companies", async function () {
     let response = await request(app)
@@ -43,8 +43,8 @@ describe("Company Routes Tests", function () {
         "handle": "fb",
         "name": "Facebook"
       }
-    ])
-  })
+    ]);
+  });
 
   test("Can search with query paramaters to /companies", async function() {
     let response = await request(app)
@@ -54,7 +54,7 @@ describe("Company Routes Tests", function () {
     expect(response.body.length).toEqual(1);
     expect(response.body[0].handle).toBe('aapl');
 
-  })
+  });
 
   test("Can POST to create new company at /companies", async function() {
     let response = await request(app)
@@ -64,7 +64,7 @@ describe("Company Routes Tests", function () {
         "name": "peets coffee",
         "num_employees": 200,
         "description": "big coffee"
-      })
+      });
 
       expect(response.body.company).toEqual({
         "handle": "peet",
@@ -72,12 +72,12 @@ describe("Company Routes Tests", function () {
         "num_employees": 200,
         "description": "big coffee",
         "logo_url": null
-    })
-  })
+    });
+  });
 
   test("Can GET from /companies/:handle", async function() {
     let response = await request(app)
-      .get('/companies/aapl')
+      .get('/companies/aapl');
 
       expect(response.body.company).toEqual({
         "handle": "aapl",
@@ -85,8 +85,8 @@ describe("Company Routes Tests", function () {
         "num_employees": 15,
         "description": "Buy a new iPhone.",
         "logo_url": null
-    })
-  })
+    });
+  });
 
   test("Can PATCH to /companies/:handle", async function() {
     let response = await request(app)
@@ -95,7 +95,7 @@ describe("Company Routes Tests", function () {
         "name": "peeties coffee",
         "num_employees": 2000,
         "description": "big coffee XL"
-      })
+      });
 
       expect(response.body.company).toEqual({
         "handle": "aapl",
@@ -103,18 +103,18 @@ describe("Company Routes Tests", function () {
         "num_employees": 2000,
         "description": "big coffee XL",
         "logo_url": null
-    })
+    });
   })
 
   test("Can DELETE at /companies/:handle", async function() {
     let response = await request(app)
     .delete('/companies/aapl')
 
-    expect(response.body.message).toBe("Company deleted.")
-  })
+    expect(response.body.message).toBe("Company deleted.");
+  });
 
 })
 
 afterAll(async function () {
   await db.end();
-})
+});

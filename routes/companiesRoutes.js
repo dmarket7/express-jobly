@@ -17,7 +17,7 @@ router.get('/', async function(req, res, next) {
   catch(err) {
     return next(err);
   }
-})
+});
 
 router.post('/', async function(req, res, next) {
   try {
@@ -29,7 +29,7 @@ router.post('/', async function(req, res, next) {
   catch(err) {
     return next(err);
   }
-})
+});
 
 router.get('/:handle', async function(req, res, next){
   try {
@@ -41,31 +41,31 @@ router.get('/:handle', async function(req, res, next){
   catch(err) {
     return next(err);
   }
-})
+});
 
 router.patch('/:handle', async function(req, res, next) {
   try {
     const handle = req.params.handle;
     const { name, num_employees, description, logo_url } = req.body;
-    const result = await Company.update({ handle, name, num_employees, description, logo_url })
+    const result = await Company.update({ handle, name, num_employees, description, logo_url });
 
-    return res.json( result )
+    return res.json( result );
   }
   catch(err){
-    return next(err)
+    return next(err);
   }
-})
+});
 
 router.delete('/:handle', async function(req, res, next) {
   try {
     const handle = req.params.handle;
-    const result = await Company.delete(handle)
+    const result = await Company.delete(handle);
 
-    return res.json( result )
+    return res.json( result );
   }
   catch(err) {
-    return next(err)
+    return next(err);
   }
-})
+});
 
-module.exports = router
+module.exports = router;

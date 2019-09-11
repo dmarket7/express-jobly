@@ -43,11 +43,9 @@ class Company {
   }
 
   static async update({ handle, name, num_employees, description, logo_url }) {
-    // 'jobs', { 'name': 'Luke', 'title': 'engineer' }, 'id', 1
-
-    let updateQuery = partialUpdate('companies', {name, num_employees, description, logo_url}, 'handle', handle)
+    let updateQuery = partialUpdate('companies', {name, num_employees, description, logo_url}, 'handle', handle);
     let company = await db.query(updateQuery.query, updateQuery.values);
-    return {company: company.rows[0]}
+    return {company: company.rows[0]};
   }
 
   static async delete(handle) {
@@ -57,7 +55,7 @@ class Company {
       WHERE handle = $1`,
       [handle]
     );
-    return {message: "Company deleted."}
+    return {message: "Company deleted."};
   }
 
   static async search(search, min_employees, max_employees){
@@ -65,43 +63,42 @@ class Company {
       throw new ExpressError(`Cannot search min > max`, 400);
     }
     let counter = 1;
-    let searchArray = []
+    let searchArray = [];
     
     let clauses = ''
     if(search) {
-      clauses += `handle LIKE $${counter}`
-      searchArray.push(`%${search}%`)
-      counter++
+      clauses += `handle LIKE $${counter}`;
+      searchArray.push(`%${search}%`);
+      counter++;
     }
     if(clauses && min_employees) {
-      clauses += ` AND num_employees >= (CAST($${counter} AS INT))`
-      searchArray.push(min_employees)
-      counter++
+      clauses += ` AND num_employees >= (CAST($${counter} AS INT))`;
+      searchArray.push(min_employees);
+      counter++;
     } else if(min_employees) {
-      clauses += `num_employees >= (CAST($${counter} AS INT))`
-      searchArray.push(min_employees)
-      counter++
+      clauses += `num_employees >= (CAST($${counter} AS INT))`;
+      searchArray.push(min_employees);
+      counter++;
     }
 
     if(clauses && max_employees){
-      clauses += ` AND num_employees <= CAST($${counter} AS INT)`
-      searchArray.push(max_employees)
-      counter++
+      clauses += ` AND num_employees <= CAST($${counter} AS INT)`;
+      searchArray.push(max_employees);
+      counter++;
     } else if(max_employees) {
-      clauses += `num_employees <= CAST($${counter} AS INT)`
-      searchArray.push(max_employees)
-      counter++
+      clauses += `num_employees <= CAST($${counter} AS INT)`;
+      searchArray.push(max_employees);
+      counter++;
     }
-    console.log("Clauses  ", clauses)
-    console.log("Search Array Vals  ", searchArray)
+
 
 
     let companies = await db.query(
       `SELECT handle, name
       FROM companies
-      WHERE ${clauses}`, searchArray )
+      WHERE ${clauses}`, searchArray );
 
-    return companies.rows
+    return companies.rows;
   }
 
 }
