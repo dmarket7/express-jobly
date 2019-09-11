@@ -31,7 +31,7 @@ describe("Test Company class", function () {
       description: "Don't be evil."
     });
 
-    expect(c).toEqual({
+    expect(c.company).toEqual({
       "handle": "goog",
       "name": "Google",
       "num_employees": 15,

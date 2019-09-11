@@ -11,22 +11,18 @@ router.get('/', async function(req, res, next) {
       return res.json(filteredCompanies);
     }
     const companies = await Company.all();
-    return res.json(companies);
-    
-  }
-  catch(err) {
+    return res.json(companies); 
+  } catch(err) {
     return next(err);
   }
 });
 
 router.post('/', async function(req, res, next) {
   try {
-    const { handle, name, num_employees, description, logo_url } = req.body;
-    const result = await Company.create({ handle, name, num_employees, description, logo_url });
+    const result = await Company.create( req.body );
 
-    return res.json({ company: result });
-  }
-  catch(err) {
+    return res.json( result );
+  } catch(err) {
     return next(err);
   }
 });
@@ -37,8 +33,7 @@ router.get('/:handle', async function(req, res, next){
     const company = await Company.get(handle);
 
     return res.json( company );
-  }
-  catch(err) {
+  } catch(err) {
     return next(err);
   }
 });
@@ -46,12 +41,10 @@ router.get('/:handle', async function(req, res, next){
 router.patch('/:handle', async function(req, res, next) {
   try {
     const handle = req.params.handle;
-    const { name, num_employees, description, logo_url } = req.body;
-    const result = await Company.update({ handle, name, num_employees, description, logo_url });
+    const result = await Company.update({handle, ...req.body});
 
     return res.json( result );
-  }
-  catch(err){
+  } catch(err){
     return next(err);
   }
 });
@@ -62,8 +55,7 @@ router.delete('/:handle', async function(req, res, next) {
     const result = await Company.delete(handle);
 
     return res.json( result );
-  }
-  catch(err) {
+  } catch(err) {
     return next(err);
   }
 });
