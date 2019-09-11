@@ -24,12 +24,12 @@ describe("Company Routes Tests", function () {
     })
   })
 
-  // test("Will recieve 404 is going to route that does not exist", async function() {
-  //   let response = await request(app)
-  //     .get('/company');
+  test("Will recieve 404 is going to route that does not exist", async function() {
+    let response = await request(app)
+      .get('/company');
 
-  //   expect(response.statusCode).toEqual(404);
-  // })
+    expect(response.statusCode).toEqual(404);
+  })
 
   test("Can get all companies from /companies", async function () {
     let response = await request(app)
@@ -75,7 +75,43 @@ describe("Company Routes Tests", function () {
     })
   })
 
-  
+  test("Can GET from /companies/:handle", async function() {
+    let response = await request(app)
+      .get('/companies/aapl')
+
+      expect(response.body.company).toEqual({
+        "handle": "aapl",
+        "name": "Apple",
+        "num_employees": 15,
+        "description": "Buy a new iPhone.",
+        "logo_url": null
+    })
+  })
+
+  test("Can PATCH to /companies/:handle", async function() {
+    let response = await request(app)
+      .patch('/companies/aapl')
+      .send({
+        "name": "peeties coffee",
+        "num_employees": 2000,
+        "description": "big coffee XL"
+      })
+
+      expect(response.body.company).toEqual({
+        "handle": "aapl",
+        "name": "peeties coffee",
+        "num_employees": 2000,
+        "description": "big coffee XL",
+        "logo_url": null
+    })
+  })
+
+  test("Can DELETE at /companies/:handle", async function() {
+    let response = await request(app)
+    .delete('/companies/aapl')
+
+    expect(response.body.message).toBe("Company deleted.")
+  })
 
 })
 
