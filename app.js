@@ -29,7 +29,6 @@ app.use(function(req, res, next) {
 
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  console.error(err.stack);
 
   return res.json({
     status: err.status,

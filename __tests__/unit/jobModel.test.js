@@ -11,7 +11,7 @@ describe("Test Job class", function () {
     await db.query("DELETE FROM companies");
     await db.query("DELETE FROM jobs");
 
-    let c1 = await Company.create({
+    await Company.create({
       handle: "fb",
       name: "Facebook",
       num_employees: 50,
@@ -53,12 +53,12 @@ describe("Test Job class", function () {
     let jobs = await Job.all();
     
     expect(jobs).toEqual([{
-      "company_handle": "fb",
-      "title": "coder"
+      company_handle: "fb",
+      title: "coder"
     },
     {
-      "company_handle": "fb",
-      "title": "CEO"
+      company_handle: "fb",
+      title: "CEO"
     }]);
   })
   

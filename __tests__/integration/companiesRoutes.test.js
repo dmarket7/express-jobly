@@ -51,12 +51,12 @@ describe("Company Routes Tests", function () {
       .get('/companies');
 
     expect(response.body.companies).toEqual([{
-      "handle": "aapl",
-      "name": "Apple"
+      handle: "aapl",
+      name: "Apple"
     },
     {
-      "handle": "fb",
-      "name": "Facebook"
+      handle: "fb",
+      name: "Facebook"
     }
     ]);
   });
@@ -75,18 +75,18 @@ describe("Company Routes Tests", function () {
     let response = await request(app)
       .post('/companies')
       .send({
-        "handle": "peet",
-        "name": "peets coffee",
-        "num_employees": 200,
-        "description": "big coffee"
+        handle: "peet",
+        name: "peets coffee",
+        num_employees: 200,
+        description: "big coffee"
       });
 
     expect(response.body.company).toEqual({
-      "handle": "peet",
-      "name": "peets coffee",
-      "num_employees": 200,
-      "description": "big coffee",
-      "logo_url": null
+      handle: "peet",
+      name: "peets coffee",
+      num_employees: 200,
+      description: "big coffee",
+      logo_url: null
     });
   });
 
@@ -95,16 +95,16 @@ describe("Company Routes Tests", function () {
       .get('/companies/aapl');
 
     expect(response.body).toEqual({
-      "company": {
-        "handle": "aapl",
-        "name": "Apple",
-        "num_employees": 15,
-        "description": "Buy a new iPhone.",
-        "logo_url": null,
-        "jobs": [
+      company: {
+        handle: "aapl",
+        name: "Apple",
+        num_employees: 15,
+        description: "Buy a new iPhone.",
+        logo_url: null,
+        jobs: [
           {
-            "title": "coder2",
-            "company_handle": "aapl"
+            title: "coder2",
+            company_handle: "aapl"
           }
         ]
       }
@@ -115,17 +115,17 @@ describe("Company Routes Tests", function () {
     let response = await request(app)
       .patch('/companies/aapl')
       .send({
-        "name": "peeties coffee",
-        "num_employees": 2000,
-        "description": "big coffee XL"
+        name: "peeties coffee",
+        num_employees: 2000,
+        description: "big coffee XL"
       });
 
     expect(response.body.company).toEqual({
-      "handle": "aapl",
-      "name": "peeties coffee",
-      "num_employees": 2000,
-      "description": "big coffee XL",
-      "logo_url": null
+      handle: "aapl",
+      name: "peeties coffee",
+      num_employees: 2000,
+      description: "big coffee XL",
+      logo_url: null
     });
   })
 

@@ -32,11 +32,11 @@ describe("Test Company class", function () {
     });
 
     expect(c).toEqual({
-      "handle": "goog",
-      "name": "Google",
-      "num_employees": 15,
-      "description": "Don't be evil.",
-      "logo_url": null
+      handle: "goog",
+      name: "Google",
+      num_employees: 15,
+      description: "Don't be evil.",
+      logo_url: null
     });
   })
 
@@ -44,12 +44,12 @@ describe("Test Company class", function () {
     let companies = await Company.all();
 
     expect(companies).toEqual([{
-      "handle": "aapl",
-      "name": "Apple"
+      handle: "aapl",
+      name: "Apple"
     },
     {
-      "handle": "fb",
-      "name": "Facebook"
+      handle: "fb",
+      name: "Facebook"
     }]);
   })
 
@@ -57,11 +57,11 @@ describe("Test Company class", function () {
     let company = await Company.get("aapl");
 
     expect(company).toEqual({
-      "handle": "aapl",
-      "name": "Apple",
-      "num_employees": 15,
-      "description": "Buy a new iPhone.",
-      "logo_url": null
+      handle: "aapl",
+      name: "Apple",
+      num_employees: 15,
+      description: "Buy a new iPhone.",
+      logo_url: null
     });
   })
 
@@ -74,11 +74,11 @@ describe("Test Company class", function () {
     });
 
     expect(company).toEqual({
-      "handle": "fb",
-      "name": "Facebook",
-      "num_employees": 1000,
-      "description": "I'm still watching.",
-      "logo_url": null
+      handle: "fb",
+      name: "Facebook",
+      num_employees: 1000,
+      description: "I'm still watching.",
+      logo_url: null
     });
   })
 

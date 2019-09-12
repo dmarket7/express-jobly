@@ -24,7 +24,7 @@ class Job {
       FROM jobs
       ORDER BY date_posted DESC`
     );
-    return allJobs.rows
+    return allJobs.rows;
   }
 
   static async get(id) {
@@ -56,30 +56,25 @@ class Job {
   static async search(title, min_salary, min_equity) {
     let searchArray = [];
     // use length of search array instead of counter: switch order of clauses and push
-    let clauses = ''
+    let clauses = [];
     if (title) {
       searchArray.push(`%${title}%`);
-      clauses += `title LIKE $${searchArray.length}`;
+      clauses.push(`title LIKE $${searchArray.length}`);
     }
-    if (clauses && min_salary) {
+    if (min_salary) {
       searchArray.push(min_salary);
-      clauses += ` AND salary >= (CAST($${searchArray.length} AS INT))`;
-    } else if (min_salary) {
-      searchArray.push(min_salary);
-      clauses += `salary >= (CAST($${searchArray.length} AS INT))`;
-    }
-    if (clauses && min_equity) {
+      clauses.push(`salary >= (CAST($${searchArray.length} AS INT))`);
+    } 
+    if (min_equity) {
       searchArray.push(min_equity);
-      clauses += ` AND equity >= CAST($${searchArray.length} AS FLOAT)`;
-    } else if (min_equity) {
-      searchArray.push(min_equity);
-      clauses += `equity >= CAST($${searchArray.length} AS FLOAT)`;
+      clauses.push(`equity >= CAST($${searchArray.length} AS FLOAT)`);
     }
+    let clausesStr = clauses.join(" AND ")
 
     let jobs = await db.query(
       `SELECT title, company_handle
       FROM jobs
-      WHERE ${clauses}`, searchArray);
+      WHERE ${clausesStr}`, searchArray);
 
     return jobs.rows;
   }
