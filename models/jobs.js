@@ -39,8 +39,8 @@ class Job {
 
   static async update({ id, ...items }) {
     let updateQuery = partialUpdate('jobs', items, 'id', id);
-    let company = await db.query(updateQuery.query, updateQuery.values);
-    return company.rows[0];
+    let job = await db.query(updateQuery.query, updateQuery.values);
+    return job.rows[0];
   }
 
   static async delete(id) {
