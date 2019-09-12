@@ -17,11 +17,11 @@ class Company {
           RETURNING handle, name, num_employees, description, logo_url`,
       [handle, name, num_employees, description, logo_url]);
         //put 404 in the route
-    if (!result.rows[0]) {
-      throw new ExpressError(`No such message: ${id}`, 404);
-    }
+    // if (!result.rows[0]) {
+    //   throw new ExpressError(`No such message: ${id}`, 404);
+    // }
 
-    return { company: result.rows[0]};
+    return result.rows[0];
   }
 
   static async all() {
@@ -39,13 +39,13 @@ class Company {
       WHERE handle = $1`,
       [handle]
     );
-    return {company: company.rows[0]}
+    return company.rows[0];
   }
 
   static async update({ handle, ...items }) {
     let updateQuery = partialUpdate('companies', items, 'handle', handle);
     let company = await db.query(updateQuery.query, updateQuery.values);
-    return {company: company.rows[0]};
+    return company.rows[0];
   }
 
   static async delete(handle) {
@@ -55,15 +55,15 @@ class Company {
       WHERE handle = $1`,
       [handle]
     );
-    return {message: "Company deleted."};
+    return "Company deleted.";
   }
 
   static async search(search, min_employees, max_employees){
     //move error to route
-    if(min_employees > max_employees) {
-      throw new ExpressError(`Cannot search min > max`, 400);
-    }
-    let counter = 1;
+    // if(min_employees > max_employees) {
+    //   throw new ExpressError(`Cannot search min > max`, 400);
+    // }
+
     let searchArray = [];
     // use length of search array instead of counter: switch order of clauses and push
     let clauses = ''

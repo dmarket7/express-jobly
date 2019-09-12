@@ -31,7 +31,7 @@ describe("Test Company class", function () {
       description: "Don't be evil."
     });
 
-    expect(c.company).toEqual({
+    expect(c).toEqual({
       "handle": "goog",
       "name": "Google",
       "num_employees": 15,
@@ -57,14 +57,11 @@ describe("Test Company class", function () {
     let company = await Company.get("aapl");
 
     expect(company).toEqual({
-      "company":
-      {
-        "handle": "aapl",
-        "name": "Apple",
-        "num_employees": 15,
-        "description": "Buy a new iPhone.",
-        "logo_url": null
-      }
+      "handle": "aapl",
+      "name": "Apple",
+      "num_employees": 15,
+      "description": "Buy a new iPhone.",
+      "logo_url": null
     });
   })
 
@@ -77,14 +74,11 @@ describe("Test Company class", function () {
     });
 
     expect(company).toEqual({
-      "company":
-      {
-        "handle": "fb",
-        "name": "Facebook",
-        "num_employees": 1000,
-        "description": "I'm still watching.",
-        "logo_url": null
-      }
+      "handle": "fb",
+      "name": "Facebook",
+      "num_employees": 1000,
+      "description": "I'm still watching.",
+      "logo_url": null
     });
   })
 
