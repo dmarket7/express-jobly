@@ -68,28 +68,22 @@ class Company {
     // use length of search array instead of counter: switch order of clauses and push
     let clauses = ''
     if(search) {
-      clauses += `handle LIKE $${counter}`;
       searchArray.push(`%${search}%`);
-      counter++;
+      clauses += `handle LIKE $${searchArray.length}`;
     }
     if(clauses && min_employees) {
-      clauses += ` AND num_employees >= (CAST($${counter} AS INT))`;
       searchArray.push(min_employees);
-      counter++;
+      clauses += ` AND num_employees >= (CAST($${searchArray.length} AS INT))`;
     } else if(min_employees) {
-      clauses += `num_employees >= (CAST($${counter} AS INT))`;
       searchArray.push(min_employees);
-      counter++;
+      clauses += `num_employees >= (CAST($${searchArray.length} AS INT))`;
     }
-
     if(clauses && max_employees){
-      clauses += ` AND num_employees <= CAST($${counter} AS INT)`;
       searchArray.push(max_employees);
-      counter++;
+      clauses += ` AND num_employees <= CAST($${searchArray.length} AS INT)`;
     } else if(max_employees) {
-      clauses += `num_employees <= CAST($${counter} AS INT)`;
       searchArray.push(max_employees);
-      counter++;
+      clauses += `num_employees <= CAST($${searchArray.length} AS INT)`;
     }
 
     let companies = await db.query(

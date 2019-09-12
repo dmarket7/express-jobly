@@ -11,7 +11,7 @@ class Job {
             equity,
             company_handle)
           VALUES ($1, $2, $3, $4)
-          RETURNING title, salary, equity, company_handle, date_posted`,
+          RETURNING id, title, salary, equity, company_handle, date_posted`,
       [title, salary, equity, company_handle]);
 
     return result.rows[0];
@@ -25,6 +25,16 @@ class Job {
       ORDER BY date_posted DESC`
     );
     return allJobs.rows
+  }
+
+  static async get(id) {
+    let job = await db.query(
+      `SELECT title, salary, equity, company_handle, date_posted
+      FROM jobs
+      WHERE id = $1`,
+      [id]
+    );
+    return job.rows[0];
   }
 }
 

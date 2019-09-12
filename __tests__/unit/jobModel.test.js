@@ -3,8 +3,10 @@ const Company = require("../../models/companies");
 const Job = require("../../models/jobs");
 process.env.NODE_ENV = "test";
 
-describe("Test Job class", function () {
+let j1;
+let j2;
 
+describe("Test Job class", function () {
   beforeEach(async function () {
     await db.query("DELETE FROM companies");
     await db.query("DELETE FROM jobs");
@@ -16,22 +18,23 @@ describe("Test Job class", function () {
       description: "I have your data."
     })
 
-    let j1 = await Job.create({
+    j1 = await Job.create({
       title: "coder",
       salary: 2000,
       equity: 0.3,
       company_handle: "fb"
     });
 
-    let j2 = await Job.create({
+    j2 = await Job.create({
       title: "CEO",
       salary: 20000,
       equity: 0.5,
       company_handle: "fb"
     });
-
+    
   });
-
+  
+  
   test("can create", async function () {
     let j3 = await Job.create({
       title: "accountant",
@@ -45,10 +48,10 @@ describe("Test Job class", function () {
     expect(j3.equity).toBe(0.2);
     expect(j3.company_handle).toBe("fb");
   })
-
+  
   test("can get all jobs", async function () {
     let jobs = await Job.all();
-
+    
     expect(jobs).toEqual([{
       "company_handle": "fb",
       "title": "coder"
@@ -57,6 +60,15 @@ describe("Test Job class", function () {
       "company_handle": "fb",
       "title": "CEO"
     }]);
+  })
+  
+  test("can get one job from id search", async function () {
+    let job = await Job.get(j2.id);
+
+    expect(job.title).toBe("CEO");
+    expect(job.salary).toBe(20000);
+    expect(job.equity).toBe(0.5);
+    expect(job.company_handle).toBe("fb");
   })
 
 });
