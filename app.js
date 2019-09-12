@@ -5,6 +5,7 @@ const morgan = require("morgan");
 
 const companiesRoutes = require("./routes/companiesRoutes");
 const jobRoutes = require("./routes/jobsRoutes");
+const userRoutes = require("./routes/usersRoutes")
 
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(morgan("tiny"));
 
 app.use("/companies", companiesRoutes);
 app.use("/jobs", jobRoutes);
+app.use("/users", userRoutes);
 
 /** 404 handler */
 

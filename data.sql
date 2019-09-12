@@ -29,5 +29,5 @@ CREATE TABLE users (
     last_name text NOT NULL,
     email text NOT NULL UNIQUE,
     photo_url text DEFAULT 'http://www.orientjphysicalsciences.org/images/user.jpg',
-    is_admin boolean DEFAULT false
+    is_admin boolean DEFAULT FALSE
 );
