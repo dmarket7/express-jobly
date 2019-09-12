@@ -71,6 +71,34 @@ describe("Test Job class", function () {
     expect(job.company_handle).toBe("fb");
   })
 
+  test("can update job information", async function () {
+    let job = await Job.update({
+      id: j2.id,
+      title: "CEO",
+      salary: 25000,
+      equity: 0.4
+    });
+
+    expect(job.title).toBe("CEO");
+    expect(job.salary).toBe(25000);
+    expect(job.equity).toBe(0.4);
+    expect(job.company_handle).toBe("fb");
+  })
+
+  test("It should delete one job  based id given.", async function () {
+    await Job.delete(j1.id);
+    let allJobs = await Job.all();
+
+    expect(allJobs.length).toEqual(1);
+  })
+
+  test("Can search.", async function () {
+    let jobs = await Job.search("coder", 1000, 0.1);
+
+    expect(jobs.length).toEqual(1);
+    expect(jobs[0].company_handle).toBe("fb")
+  })
+
 });
 
 afterAll(async function () {
