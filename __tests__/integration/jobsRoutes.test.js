@@ -6,10 +6,23 @@ const Job = require('../../models/jobs');
 process.env.NODE_ENV = "test";
 
 describe("Jobs Routes Tests", function () {
+  let admin;
 
   beforeEach(async function () {
     await db.query("DELETE FROM companies");
-    await db.query("DELETE FROM jobs")
+    await db.query("DELETE FROM jobs");
+    await db.query("DELETE FROM users");
+
+    admin = await request(app)
+      .post('/users')
+      .send({
+        username: "user309",
+        password: "abc123",
+        first_name: "Jack",
+        last_name: "Doe",
+        email: "user3@email.com",
+        is_admin: true
+      });
 
     await Company.create({
       handle: "fb",
@@ -42,7 +55,10 @@ describe("Jobs Routes Tests", function () {
   });
   test("Can get all jobs from /jobs", async function () {
     let response = await request(app)
-      .get('/jobs');
+      .get('/jobs')
+      .send({
+        _token: admin.body.token
+      });
 
     expect(response.body).toEqual({
       jobs: [{
@@ -61,7 +77,10 @@ describe("Jobs Routes Tests", function () {
     let response = await request(app)
       .get('/jobs')
       .query({ min_salary: 1000, min_equity: 0.4 })
-
+      .send({
+        _token: admin.body.token
+      });
+    console.log("ADMIN BODY-----------", admin.body)
     expect(response.body.jobs.length).toEqual(1);
     expect(response.body.jobs[0].title).toBe('CEO');
 
@@ -74,7 +93,8 @@ describe("Jobs Routes Tests", function () {
         title: "coder2",
         salary: 3000,
         equity: 0.2,
-        company_handle: "fb"
+        company_handle: "fb",
+        _token: admin.body.token
       });
 
     expect(response.body.job.title).toBe("coder2");
@@ -85,7 +105,10 @@ describe("Jobs Routes Tests", function () {
 
   test("Can GET from /jobs/:title", async function () {
     let response = await request(app)
-      .get(`/jobs/${j2.id}`);
+      .get(`/jobs/${j2.id}`)
+      .send({
+        _token: admin.body.token
+      });
 
     expect(response.body.job.title).toBe("CEO");
     expect(response.body.job.salary).toBe(20000);
@@ -100,7 +123,8 @@ describe("Jobs Routes Tests", function () {
         title: "CEO",
         salary: 30000,
         equity: 0.6,
-        company_handle: "fb"
+        company_handle: "fb",
+        _token: admin.body.token
       });
 
     expect(response.body.job.title).toBe("CEO");
@@ -112,6 +136,9 @@ describe("Jobs Routes Tests", function () {
   test("Can DELETE at /jobs/:id", async function () {
     let response = await request(app)
       .delete(`/jobs/${j1.id}`)
+      .send({
+        _token: admin.body.token
+      });
 
     expect(response.body.message).toBe("Job deleted.");
   });
