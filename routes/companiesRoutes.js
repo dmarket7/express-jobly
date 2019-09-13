@@ -4,7 +4,7 @@ const ExpressError = require('../helpers/expressError');
 
 const Company = require('../models/companies');
 const Job = require('../models/jobs');
-const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
+const { ensureLoggedIn, ensureCorrectUser, ensureAdmin } = require("../middleware/auth");
 
 router.get('/', ensureLoggedIn, async function (req, res, next) {
   try {
@@ -19,7 +19,7 @@ router.get('/', ensureLoggedIn, async function (req, res, next) {
   }
 });
 
-router.post('/', async function (req, res, next) {
+router.post('/', ensureLoggedIn, ensureAdmin, async function (req, res, next) {
   try {
     const result = await Company.create(req.body);
 
@@ -42,7 +42,7 @@ router.get('/:handle', ensureLoggedIn, async function (req, res, next) {
   }
 });
 
-router.patch('/:handle', async function (req, res, next) {
+router.patch('/:handle', ensureLoggedIn, ensureAdmin, async function (req, res, next) {
   try {
     const handle = req.params.handle;
     const result = await Company.update({ handle, ...req.body });
@@ -53,7 +53,7 @@ router.patch('/:handle', async function (req, res, next) {
   }
 });
 
-router.delete('/:handle', async function (req, res, next) {
+router.delete('/:handle', ensureLoggedIn, ensureAdmin, async function (req, res, next) {
   try {
     const handle = req.params.handle;
     const result = await Company.delete(handle);

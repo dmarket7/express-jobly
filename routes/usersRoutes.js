@@ -19,7 +19,7 @@ router.get('/', async function(req, res, next) {
   }
 })
 
-router.get('/:username', ensureCorrectUser, async function(req, res, next) {
+router.get('/:username', async function(req, res, next) {
   try {
     const username = req.params.username;
     const user = await User.get(username);
