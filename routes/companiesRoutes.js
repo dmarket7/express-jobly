@@ -4,8 +4,9 @@ const ExpressError = require('../helpers/expressError');
 
 const Company = require('../models/companies');
 const Job = require('../models/jobs');
+const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
 
-router.get('/', async function (req, res, next) {
+router.get('/', ensureLoggedIn, async function (req, res, next) {
   try {
     if (Object.keys(req.query).length !== 0) {
       const filteredCompanies = await Company.search(req.query.search, req.query.min_employees, req.query.max_employees);
@@ -28,7 +29,7 @@ router.post('/', async function (req, res, next) {
   }
 });
 
-router.get('/:handle', async function (req, res, next) {
+router.get('/:handle', ensureLoggedIn, async function (req, res, next) {
   try {
     const handle = req.params.handle;
     const company = await Company.get(handle);

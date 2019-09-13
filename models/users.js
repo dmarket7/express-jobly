@@ -1,12 +1,15 @@
 const db = require("../db");
 const partialUpdate = require("../helpers/partialUpdate");
 const ExpressError = require('../helpers/expressError');
+const bcrypt = require("bcrypt")
+const { BCRYPT_WORK_FACTOR } = require("../config")
 
 class User {
 
   static async create({ username, password, first_name, last_name, email, photo_url, is_admin }) {
     let clauseOptions = [];
-    let sterilInputs = [username, password, first_name, last_name, email]
+    let hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
+    let sterilInputs = [username, hashedPassword, first_name, last_name, email]
     let sterilCount = sterilInputs.length+1;
     let sterilCountString = ``
 
@@ -77,6 +80,23 @@ class User {
       return "User deleted."
     }
     throw new ExpressError('No user exists', 404)
+  }
+
+  /** Authenticate: is this username/password valid? Returns boolean. */
+
+  static async authenticate(username, password) {
+    let userInfo = await db.query(
+      `SELECT username, password
+      FROM users
+      WHERE username = $1`,
+      [username]
+    )
+
+    if (await bcrypt.compare(password, userInfo.rows[0].password)) {
+      return true
+    } else {
+      return false
+    }
   }
 
 

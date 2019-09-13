@@ -4,8 +4,9 @@ const jsonschema = require('jsonschema');
 const ExpressError = require('../helpers/expressError');
 const jobsSchema = require('../schemas/jobsSchema');
 const Job = require('../models/jobs');
+const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
 
-router.get('/', async function (req, res, next) {
+router.get('/', ensureLoggedIn, async function (req, res, next) {
   try {
     if (Object.keys(req.query).length !== 0) {
       const filteredJobs = await Job.search(req.query.title, req.query.min_salary, req.query.min_equity);
@@ -36,7 +37,7 @@ router.post('/', async function (req, res, next) {
   }
 })
 
-router.get('/:id', async function (req, res, next) {
+router.get('/:id', ensureLoggedIn, async function (req, res, next) {
   try {
     const id = req.params.id;
     const job = await Job.get(id);
