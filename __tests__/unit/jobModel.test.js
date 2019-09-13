@@ -8,8 +8,8 @@ let j2;
 
 describe("Test Job class", function () {
   beforeEach(async function () {
-    await db.query("DELETE FROM companies");
     await db.query("DELETE FROM jobs");
+    await db.query("DELETE FROM companies");
 
     await Company.create({
       handle: "fb",

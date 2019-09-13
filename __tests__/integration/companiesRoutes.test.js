@@ -7,8 +7,21 @@ process.env.NODE_ENV = "test";
 
 describe("Company Routes Tests", function () {
 
+  let admin;
   beforeEach(async function () {
     await db.query("DELETE FROM companies");
+    await db.query("DELETE FROM users");
+
+    admin = await request(app)
+      .post('/users')
+      .send({
+        username: "user309",
+        password: "abc123",
+        first_name: "Jack",
+        last_name: "Doe",
+        email: "user3@email.com",
+        is_admin: true
+      });
 
     let c1 = await Company.create({
       handle: "aapl",
@@ -48,23 +61,32 @@ describe("Company Routes Tests", function () {
 
   test("Can get all companies from /companies", async function () {
     let response = await request(app)
-      .get('/companies');
+      .get('/companies')
+      .send({
+        _token: admin.body.token
+      });
 
     expect(response.body.companies).toEqual([{
-      handle: "aapl",
-      name: "Apple"
-    },
-    {
-      handle: "fb",
-      name: "Facebook"
-    }
+        handle: "aapl",
+        name: "Apple"
+      },
+      {
+        handle: "fb",
+        name: "Facebook"
+      }
     ]);
   });
 
   test("Can search with query paramaters to /companies", async function () {
     let response = await request(app)
       .get('/companies')
-      .query({ search: "aapl", min_employees: 10 })
+      .query({
+        search: "aapl",
+        min_employees: 10
+      })
+      .send({
+        _token: admin.body.token
+      });
 
     expect(response.body.companies.length).toEqual(1);
     expect(response.body.companies[0].handle).toBe('aapl');
@@ -78,7 +100,8 @@ describe("Company Routes Tests", function () {
         handle: "peet",
         name: "peets coffee",
         num_employees: 200,
-        description: "big coffee"
+        description: "big coffee",
+        _token: admin.body.token
       });
 
     expect(response.body.company).toEqual({
@@ -92,7 +115,10 @@ describe("Company Routes Tests", function () {
 
   test("Can GET from /companies/:handle", async function () {
     let response = await request(app)
-      .get('/companies/aapl');
+      .get('/companies/aapl')
+      .send({
+        _token: admin.body.token
+      });
 
     expect(response.body).toEqual({
       company: {
@@ -101,12 +127,10 @@ describe("Company Routes Tests", function () {
         num_employees: 15,
         description: "Buy a new iPhone.",
         logo_url: null,
-        jobs: [
-          {
-            title: "coder2",
-            company_handle: "aapl"
-          }
-        ]
+        jobs: [{
+          title: "coder2",
+          company_handle: "aapl"
+        }]
       }
     });
   });
@@ -117,7 +141,8 @@ describe("Company Routes Tests", function () {
       .send({
         name: "peeties coffee",
         num_employees: 2000,
-        description: "big coffee XL"
+        description: "big coffee XL",
+        _token: admin.body.token
       });
 
     expect(response.body.company).toEqual({
@@ -132,6 +157,9 @@ describe("Company Routes Tests", function () {
   test("Can DELETE at /companies/:handle", async function () {
     let response = await request(app)
       .delete('/companies/aapl')
+      .send({
+        _token: admin.body.token
+      });
 
     expect(response.body.message).toBe("Company deleted.");
   });
